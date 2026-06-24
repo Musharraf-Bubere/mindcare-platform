@@ -21,6 +21,8 @@ import DataDeletion from "./Pages/DataDeletion";
 import DownloadData from "./Pages/DownloadData";
 import PrivacySettings from "./Pages/PrivacySettings";
 import AuditLogs from "./Pages/AuditLogs";
+import EmergencySupport from "./pages/EmergencySupport";
+
 
 function App() {
   return (
@@ -48,6 +50,11 @@ function App() {
         <Route path="/privacy-settings" element={<PrivacySettings />} />
         <Route path="/audit-logs" element={<AuditLogs />} />
         <Route path="/availability" element={<AvailabilityManagement />} />
+<Route
+  path="/emergency-support"
+  element={<EmergencySupport />}
+/>
+
       </Routes>
     </BrowserRouter>
   );

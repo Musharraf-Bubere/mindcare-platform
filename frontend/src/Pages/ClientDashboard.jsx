@@ -82,6 +82,44 @@ function ClientDashboard() {
               Assessments
             </h2>
 
+{/* Mental Health Safety Notice */}
+
+<div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-lg mb-8">
+  <h2 className="text-xl font-bold text-red-700 mb-2">
+    🚨 Need Immediate Support?
+  </h2>
+
+  <p className="text-gray-700 mb-3">
+    If you are experiencing severe distress, self-harm thoughts,
+    or feel unsafe, please seek immediate professional help.
+  </p>
+
+  <div className="grid md:grid-cols-3 gap-3">
+
+    <div className="bg-white p-3 rounded shadow">
+      <h3 className="font-bold text-red-600">
+        Emergency
+      </h3>
+      <p>Call 112</p>
+    </div>
+
+    <div className="bg-white p-3 rounded shadow">
+      <h3 className="font-bold text-red-600">
+        Mental Health Helpline
+      </h3>
+      <p>Tele-MANAS: 14416</p>
+    </div>
+
+    <div className="bg-white p-3 rounded shadow">
+      <h3 className="font-bold text-red-600">
+        Crisis Support
+      </h3>
+      <p>Available 24×7</p>
+    </div>
+
+  </div>
+</div>
+
             <h1 className="text-5xl font-bold text-blue-600 mt-3">
               12
             </h1>
