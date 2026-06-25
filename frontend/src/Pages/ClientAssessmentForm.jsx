@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { submitAssessment } from "../Services/assessmentService";
 
 
 function ClientAssessmentForm() {
@@ -36,19 +37,36 @@ const handleChange = (e) => {
   }
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
 
-  console.log(formData);
+  try {
 
-  if (formData.risk === "Severe") {
+    const response = await submitAssessment(formData);
 
-    navigate("/emergency-support");
+    alert(response.message);
 
-  } else {
+    if (formData.risk === "Severe") {
 
-    navigate("/recommendation");
+      navigate("/emergency-support");
+
+    } else {
+
+      navigate("/recommendation");
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    if (error.response) {
+      alert(error.response.data.message);
+    } else {
+      alert("Failed to submit assessment");
+    }
 
   }
+
 };
 
 
@@ -169,37 +187,28 @@ className="w-full border p-3 rounded mb-4"
 <option>Occasional</option>
 <option>Frequent</option>
 <option>Severe</option>
-
+</select>
 {
   formData.risk === "Severe" && (
     <div className="bg-red-100 border border-red-500 p-4 rounded-lg mb-4">
+
       <h3 className="text-red-700 font-bold text-lg">
         🚨 Immediate Attention Recommended
       </h3>
 
       <p className="text-red-600 mt-2">
-        Based on your response, we strongly recommend
-        contacting a mental health professional immediately.
+        Based on your response, we strongly recommend contacting a mental health professional immediately.
       </p>
 
       <div className="mt-3">
-        <p>
-          📞 Emergency: 112
-        </p>
-
-        <p>
-          ☎ Tele-MANAS Helpline: 14416
-        </p>
-
-        <p>
-          🏥 Seek nearby professional support.
-        </p>
+        <p>📞 Emergency: 112</p>
+        <p>☎ Tele-MANAS Helpline: 14416</p>
+        <p>🏥 Seek nearby professional support.</p>
       </div>
+
     </div>
   )
 }
-
-</select>
 
 {/* Therapy Start */}
 

@@ -1,22 +1,26 @@
+import { useEffect, useState } from "react";
+import { getTherapists } from "../Services/therapistService";
+
 function TherapistRecommendation() {
 
-  const therapists = [
-    {
-      name: "Dr. Priya Sharma",
-      specialization: "Anxiety Specialist",
-      rating: "4.9"
-    },
-    {
-      name: "Dr. Aman Verma",
-      specialization: "Stress Management",
-      rating: "4.8"
-    },
-    {
-      name: "Dr. Neha Gupta",
-      specialization: "Depression Counselling",
-      rating: "4.7"
+  const [therapists, setTherapists] = useState([]);
+
+  useEffect(() => {
+    loadTherapists();
+  }, []);
+
+  const loadTherapists = async () => {
+    try {
+
+      const response = await getTherapists();
+
+      setTherapists(response.therapists);
+
+    } catch (error) {
+      console.error(error);
+      alert("Unable to load therapists");
     }
-  ];
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
@@ -27,23 +31,35 @@ function TherapistRecommendation() {
 
       <div className="grid md:grid-cols-3 gap-6">
 
-        {therapists.map((t, index) => (
+        {therapists.map((t) => (
 
           <div
-            key={index}
+            key={t.id}
             className="bg-white p-6 rounded-xl shadow-lg"
           >
 
             <h2 className="text-2xl font-bold">
-              {t.name}
+              {t.full_name}
             </h2>
 
             <p className="text-gray-600 mt-2">
               {t.specialization}
             </p>
 
-            <p className="text-yellow-500 mt-2">
-              ⭐ {t.rating}
+            <p className="mt-2">
+              <strong>Experience:</strong> {t.experience} Years
+            </p>
+
+            <p className="mt-2">
+              <strong>Languages:</strong> {t.languages}
+            </p>
+
+            <p className="mt-2">
+              <strong>Session:</strong> {t.session_mode}
+            </p>
+
+            <p className="mt-2">
+              <strong>Fee:</strong> ₹{t.fee_range}
             </p>
 
             <button
