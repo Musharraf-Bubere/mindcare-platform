@@ -38,10 +38,24 @@ class AssessmentModel:
         conn = get_db_connection()
         cursor = conn.cursor()
 
+        # Remove old responses
+        cursor.execute(
+            """
+            DELETE FROM assessment_responses
+            WHERE user_id=%s
+            """,
+            (user_id,)
+        )
+
         query = """
         INSERT INTO assessment_responses
-        (user_id, question_id, selected_option)
-        VALUES (%s, %s, %s)
+        (
+            user_id,
+            question_id,
+            selected_option
+        )
+        VALUES
+        (%s,%s,%s)
         """
 
         for response in responses:

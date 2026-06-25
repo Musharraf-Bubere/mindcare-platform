@@ -24,7 +24,10 @@ def get_privacy(user_id):
         "settings": {
             "therapist_access": False,
             "research_usage": False,
-            "email_notifications": True
+            "email_notifications": True,
+            "profile_public": False,
+            "share_assessment": True,
+            "therapist_messaging": True
         }
     })
 
@@ -39,9 +42,12 @@ def save_privacy():
 
     PrivacyModel.save_settings(
         data["user_id"],
-        data["therapist_access"],
-        data["research_usage"],
-        data["email_notifications"]
+        data.get("therapist_access", False),
+        data.get("research_usage", False),
+        data.get("email_notifications", True),
+        data.get("profile_public", False),
+        data.get("share_assessment", True),
+        data.get("therapist_messaging", True)
     )
 
     # Audit Log
