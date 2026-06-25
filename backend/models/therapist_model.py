@@ -60,23 +60,28 @@ class TherapistModel:
 
     @staticmethod
     def get_all_therapists():
+
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
         query = """
         SELECT
-            therapist_id,
-            user_id,
-            specialization,
-            experience,
-            qualification,
-            languages,
-            therapy_methods,
-            fee_range,
-            session_mode,
-            bio,
-            rating
-        FROM therapists
+            t.therapist_id,
+            t.user_id,
+            u.full_name,
+            u.email,
+            t.specialization,
+            t.experience,
+            t.qualification,
+            t.languages,
+            t.therapy_methods,
+            t.fee_range,
+            t.session_mode,
+            t.bio,
+            t.rating
+        FROM therapists t
+        INNER JOIN users u
+            ON t.user_id = u.id
         """
 
         cursor.execute(query)

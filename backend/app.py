@@ -4,6 +4,7 @@ from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.profile_routes import profile_bp
 from routes.therapist import therapist_bp
+from routes.assessment_routes import assessment_bp
 
 app = Flask(__name__)
 
@@ -13,6 +14,7 @@ CORS(app)
 app.register_blueprint(auth_bp)
 app.register_blueprint(profile_bp)
 app.register_blueprint(therapist_bp)
+app.register_blueprint(assessment_bp)
 
 
 @app.route("/")
