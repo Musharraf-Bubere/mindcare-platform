@@ -1,3 +1,4 @@
+import bcrypt
 from models.db import get_db_connection
 
 
@@ -8,6 +9,12 @@ class UserModel:
         conn = get_db_connection()
         cursor = conn.cursor()
 
+        # Hash the password before storing it
+        hashed_password = bcrypt.hashpw(
+            password.encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
+
         query = """
         INSERT INTO users
         (full_name, email, password, role, phone, gender, age)
@@ -17,7 +24,7 @@ class UserModel:
         values = (
             name,
             email,
-            password,
+            hashed_password,
             role,
             phone,
             gender,
