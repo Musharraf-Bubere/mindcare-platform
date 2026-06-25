@@ -4,6 +4,7 @@ import {
   getProfile,
   updateProfile
 } from "../Services/profileService";
+import LogoutButton from "../Components/LogoutButton";
 
 function Profile() {
 
@@ -166,6 +167,8 @@ function Profile() {
           >
             Privacy Dashboard
           </button>
+
+          <LogoutButton />
 
         </div>
 
