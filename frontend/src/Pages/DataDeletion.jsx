@@ -1,75 +1,139 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 function DataDeletion() {
-  const navigate = useNavigate();
 
-  const handleDelete = () => {
-    alert("Account deletion request submitted successfully!");
-  };
+    const navigate = useNavigate();
 
-  return (
-    <div className="min-h-screen bg-gray-100">
+    const [confirmText, setConfirmText] = useState("");
 
-      {/* Hero Section */}
-      <div className="bg-blue-600 text-white py-16 px-10">
-        <h1 className="text-5xl font-bold mb-4">
-          Data Deletion
-        </h1>
+    const handleDelete = async () => {
 
-        <p className="text-lg">
-          Request permanent deletion of your account and personal data.
-        </p>
-      </div>
+        if (confirmText !== "DELETE") {
 
-      {/* Deletion Card */}
-      <div className="p-10">
+            alert("Please type DELETE to continue.");
 
-        <div className="bg-white p-8 rounded-xl shadow max-w-3xl">
+            return;
 
-          <h2 className="text-2xl font-bold text-red-600 mb-4">
-            Delete Account
-          </h2>
+        }
 
-          <p className="text-gray-600 mb-6">
-            Warning: This action is permanent and cannot be undone.
-            All your personal information, assessments, and account
-            data will be removed.
-          </p>
+        const user = JSON.parse(localStorage.getItem("user"));
 
-          <label className="block font-semibold mb-2">
-            Reason for deletion
-          </label>
+        try {
 
-          <textarea
-            rows="5"
-            placeholder="Enter your reason..."
-            className="w-full border rounded-lg p-3 mb-6"
-          ></textarea>
+            const response = await api.delete(
+                `/privacy/delete/${user.id}`
+            );
 
-          <div className="flex gap-4">
+            alert(response.data.message);
 
-            <button
-              onClick={handleDelete}
-              className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition"
-            >
-              Delete My Account
-            </button>
+            localStorage.clear();
 
-            <button
-              onClick={() => navigate("/privacy")}
-              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
-            >
-              Back
-            </button>
+            navigate("/login");
 
-          </div>
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Unable to delete account.");
+
+        }
+
+    };
+
+    return (
+
+        <div className="min-h-screen bg-gray-100">
+
+            {/* Hero */}
+
+            <div className="bg-red-600 text-white py-16 px-10">
+
+                <h1 className="text-5xl font-bold">
+                    Delete My Account
+                </h1>
+
+                <p className="mt-4 text-lg">
+                    This action is permanent and cannot be undone.
+                </p>
+
+            </div>
+
+            <div className="max-w-4xl mx-auto mt-10">
+
+                <div className="bg-white rounded-xl shadow-lg p-8">
+
+                    <h2 className="text-3xl font-bold mb-5">
+
+                        ⚠ Warning
+
+                    </h2>
+
+                    <p className="mb-5">
+
+                        Deleting your account will permanently remove:
+
+                    </p>
+
+                    <ul className="list-disc ml-8 space-y-2">
+
+                        <li>Your Profile</li>
+
+                        <li>Assessment History</li>
+
+                        <li>Privacy Settings</li>
+
+                        <li>Therapist Recommendations</li>
+
+                        <li>All Personal Information</li>
+
+                    </ul>
+
+                    <div className="mt-8">
+
+                        <label className="font-bold">
+
+                            Type <span className="text-red-600">DELETE</span> to confirm
+
+                        </label>
+
+                        <input
+                            value={confirmText}
+                            onChange={(e) =>
+                                setConfirmText(e.target.value)
+                            }
+                            className="border w-full mt-3 p-3 rounded-lg"
+                        />
+
+                    </div>
+
+                    <div className="flex gap-5 mt-8">
+
+                        <button
+                            onClick={handleDelete}
+                            className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700"
+                        >
+                            Delete My Account
+                        </button>
+
+                        <button
+                            onClick={() => navigate("/privacy")}
+                            className="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-      </div>
+    );
 
-    </div>
-  );
 }
 
 export default DataDeletion;
