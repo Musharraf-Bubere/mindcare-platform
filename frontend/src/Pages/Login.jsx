@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { loginUser } from "../Services/userService";
 
 function Login() {
   const navigate = useNavigate();
@@ -8,14 +9,58 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    if (role === "client") {
-      navigate("/client-dashboard");
-    } else if (role === "therapist") {
-      navigate("/therapist-dashboard");
-    } else {
-      navigate("/admin-dashboard");
+  const handleLogin = async () => {
+
+    if (!email.trim()) {
+      alert("Email is required");
+      return;
     }
+
+    if (!password.trim()) {
+      alert("Password is required");
+      return;
+    }
+
+    try {
+
+      const response = await loginUser({
+        email,
+        password
+      });
+
+      console.log(response);
+
+      localStorage.setItem("token", response.token);
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(response.user)
+      );
+
+      alert("Login Successful");
+
+      if (response.user.role === "client") {
+        navigate("/client-dashboard");
+      }
+      else if (response.user.role === "therapist") {
+        navigate("/therapist-dashboard");
+      }
+      else {
+        navigate("/admin-dashboard");
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Unable to connect to server.");
+      }
+
+    }
+
   };
 
   return (

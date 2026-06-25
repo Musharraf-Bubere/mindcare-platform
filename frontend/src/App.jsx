@@ -23,37 +23,166 @@ import PrivacySettings from "./Pages/PrivacySettings";
 import AuditLogs from "./Pages/AuditLogs";
 import EmergencySupport from "./pages/EmergencySupport";
 
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Public Routes */}
+
         <Route path="/" element={<Home />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot" element={<ForgotPassword />} />
 
-        <Route path="/client-dashboard" element={<ClientDashboard />} />
-        <Route path="/therapist-dashboard" element={<TherapistDashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        {/* Protected Routes */}
 
-        <Route path="/client-assessment" element={<ClientAssessmentForm />} />
-        <Route path="/therapist-assessment" element={<TherapistAssessmentForm />} />
-        <Route path="/recommendation" element={<TherapistRecommendation />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/privacy" element={<PrivacyDashboard />} />
-        <Route path="/consent" element={<ConsentManagement />} />
-        <Route path="/data-access" element={<DataAccess />} />
-        <Route path="/data-deletion" element={<DataDeletion />} />
-        <Route path="/download-data" element={<DownloadData />} />
-        <Route path="/privacy-settings" element={<PrivacySettings />} />
-        <Route path="/audit-logs" element={<AuditLogs />} />
-        <Route path="/availability" element={<AvailabilityManagement />} />
-<Route
-  path="/emergency-support"
-  element={<EmergencySupport />}
-/>
+        <Route
+          path="/client-dashboard"
+          element={
+            <ProtectedRoute>
+              <ClientDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/therapist-dashboard"
+          element={
+            <ProtectedRoute>
+              <TherapistDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/client-assessment"
+          element={
+            <ProtectedRoute>
+              <ClientAssessmentForm />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/therapist-assessment"
+          element={
+            <ProtectedRoute>
+              <TherapistAssessmentForm />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/recommendation"
+          element={
+            <ProtectedRoute>
+              <TherapistRecommendation />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/privacy"
+          element={
+            <ProtectedRoute>
+              <PrivacyDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/consent"
+          element={
+            <ProtectedRoute>
+              <ConsentManagement />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/data-access"
+          element={
+            <ProtectedRoute>
+              <DataAccess />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/data-deletion"
+          element={
+            <ProtectedRoute>
+              <DataDeletion />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/download-data"
+          element={
+            <ProtectedRoute>
+              <DownloadData />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/privacy-settings"
+          element={
+            <ProtectedRoute>
+              <PrivacySettings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/audit-logs"
+          element={
+            <ProtectedRoute>
+              <AuditLogs />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/availability"
+          element={
+            <ProtectedRoute>
+              <AvailabilityManagement />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/emergency-support"
+          element={
+            <ProtectedRoute>
+              <EmergencySupport />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </BrowserRouter>
