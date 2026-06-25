@@ -7,6 +7,9 @@ from models.audit_model import AuditModel
 assessment_bp = Blueprint("assessment", __name__)
 
 
+# -------------------------
+# Get Assessment Questions
+# -------------------------
 @assessment_bp.route("/assessment/questions", methods=["GET"])
 def get_questions():
 
@@ -39,6 +42,9 @@ def get_questions():
     })
 
 
+# -------------------------
+# Submit Assessment
+# -------------------------
 @assessment_bp.route("/assessment/submit", methods=["POST"])
 @token_required
 def submit_assessment():
@@ -49,32 +55,31 @@ def submit_assessment():
 
     responses = []
 
-    question_mapping = {
-        1: data.get("ageGroup"),
-        2: data.get("genderPreference"),
-        3: data.get("language"),
-        4: data.get("concern"),
-        5: data.get("severity"),
-        6: data.get("risk"),
-        7: data.get("therapyApproach"),
-        8: data.get("therapyMethod"),
-        9: data.get("availability"),
-        10: data.get("sessions"),
-        11: data.get("budget"),
-        12: data.get("goal")
-    }
+    for question_id, answer in data.items():
 
-    for question_id, answer in question_mapping.items():
+        # Multiple Selection
+        if isinstance(answer, list):
 
-        responses.append({
-            "question_id": question_id,
-            "selected_option": answer
-        })
+            for option in answer:
 
-    # Save Assessment
-    AssessmentModel.save_assessment(user_id, responses)
+                responses.append({
+                    "question_id": int(question_id),
+                    "selected_option": option
+                })
 
-    # Audit Log
+        # Single Selection
+        else:
+
+            responses.append({
+                "question_id": int(question_id),
+                "selected_option": answer
+            })
+
+    AssessmentModel.save_assessment(
+        user_id,
+        responses
+    )
+
     AuditModel.add_log(
         user_id,
         "Submitted mental health assessment"

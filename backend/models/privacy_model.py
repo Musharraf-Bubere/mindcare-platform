@@ -21,13 +21,15 @@ class PrivacyModel:
 
         return settings
 
-
     @staticmethod
     def save_settings(
         user_id,
         therapist_access,
         research_usage,
-        email_notifications
+        email_notifications,
+        profile_public,
+        share_assessment,
+        therapist_messaging
     ):
 
         conn = get_db_connection()
@@ -40,19 +42,34 @@ class PrivacyModel:
                 user_id,
                 therapist_access,
                 research_usage,
-                email_notifications
+                email_notifications,
+                profile_public,
+                share_assessment,
+                therapist_messaging
             )
-            VALUES (%s,%s,%s,%s)
+
+            VALUES
+            (
+                %s,%s,%s,%s,%s,%s,%s
+            )
+
             ON DUPLICATE KEY UPDATE
+
                 therapist_access=VALUES(therapist_access),
                 research_usage=VALUES(research_usage),
-                email_notifications=VALUES(email_notifications)
+                email_notifications=VALUES(email_notifications),
+                profile_public=VALUES(profile_public),
+                share_assessment=VALUES(share_assessment),
+                therapist_messaging=VALUES(therapist_messaging)
             """,
             (
                 user_id,
                 therapist_access,
                 research_usage,
-                email_notifications
+                email_notifications,
+                profile_public,
+                share_assessment,
+                therapist_messaging
             )
         )
 
@@ -60,7 +77,6 @@ class PrivacyModel:
 
         cursor.close()
         conn.close()
-
 
     @staticmethod
     def get_user_data(user_id):
@@ -101,7 +117,10 @@ class PrivacyModel:
             SELECT
                 therapist_access,
                 research_usage,
-                email_notifications
+                email_notifications,
+                profile_public,
+                share_assessment,
+                therapist_messaging
             FROM privacy_settings
             WHERE user_id = %s
         """, (user_id,))
@@ -115,7 +134,7 @@ class PrivacyModel:
             "assessment": assessment,
             "privacy": privacy
         }
-    
+
     @staticmethod
     def delete_user_data(user_id):
 
@@ -140,7 +159,7 @@ class PrivacyModel:
             (user_id,)
         )
 
-        # Finally delete user
+        # Delete user
         cursor.execute(
             "DELETE FROM users WHERE id=%s",
             (user_id,)
