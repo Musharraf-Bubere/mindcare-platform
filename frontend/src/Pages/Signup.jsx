@@ -2,8 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { registerUser } from "../services/userService";
 
-
-
 function Signup() {
 
   const navigate = useNavigate();
@@ -52,6 +50,7 @@ function Signup() {
         alert("Age is required");
         return;
       }
+
     }
 
     if (role === "therapist") {
@@ -70,25 +69,28 @@ function Signup() {
         alert("Specialization is required");
         return;
       }
+
     }
 
     const userData = {
       name,
       email,
       phone,
-      gender,
-      age,
+      gender: role === "client" ? gender : null,
+      age: role === "client" ? age : null,
       experience,
       specialization,
       password,
       role
     };
 
-    console.log(userData);
+    console.log("Sending Data:", userData);
 
     try {
 
-      await registerUser(userData);
+      const response = await registerUser(userData);
+
+      console.log("Success:", response);
 
       alert("Registration Successful");
 
@@ -96,10 +98,22 @@ function Signup() {
 
     } catch (error) {
 
-      console.log(error);
+      console.error("Registration Error:", error);
 
-      alert("Registration Failed");
+      if (error.response) {
+
+        console.log("Backend Response:", error.response.data);
+
+        alert(error.response.data.message);
+
+      } else {
+
+        alert(error.message);
+
+      }
+
     }
+
   };
 
   return (
@@ -215,7 +229,6 @@ function Signup() {
         </button>
 
         <p className="mt-4 text-center">
-
           Already have account?
 
           <Link

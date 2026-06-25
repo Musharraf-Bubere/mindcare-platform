@@ -1,79 +1,162 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuditLogs } from "../Services/auditService";
 
 function AuditLogs() {
-  const navigate = useNavigate();
 
-  return (
-    <div className="min-h-screen bg-gray-100">
+    const navigate = useNavigate();
 
-      {/* Hero Section */}
-      <div className="bg-blue-600 text-white py-16 px-10">
-        <h1 className="text-5xl font-bold mb-4">
-          Audit Logs
-        </h1>
+    const [logs, setLogs] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-        <p className="text-lg">
-          View privacy-related account activities.
-        </p>
-      </div>
+    useEffect(() => {
 
-      {/* Audit Log Card */}
-      <div className="p-10">
+        const fetchLogs = async () => {
 
-        <div className="bg-white p-8 rounded-xl shadow max-w-4xl">
+            try {
 
-          <h2 className="text-2xl font-bold mb-6">
-            Recent Activity
-          </h2>
+                const user = JSON.parse(
+                    localStorage.getItem("user")
+                );
 
-          <div className="space-y-4">
+                const response = await getAuditLogs(user.id);
 
-            <div className="border-b pb-3">
-              <p className="font-semibold">
-                Privacy Settings Updated
-              </p>
-              <p className="text-gray-500 text-sm">
-                24 June 2026 - 10:15 AM
-              </p>
+                setLogs(response.logs);
+
+            } catch (error) {
+
+                console.log(error);
+
+                alert("Unable to load audit logs.");
+
+            } finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+        fetchLogs();
+
+    }, []);
+
+    if (loading) {
+
+        return (
+            <div className="min-h-screen flex justify-center items-center text-2xl">
+                Loading Audit Logs...
+            </div>
+        );
+
+    }
+
+    return (
+
+        <div className="min-h-screen bg-gray-100">
+
+            {/* Hero */}
+
+            <div className="bg-blue-600 text-white py-16 px-10">
+
+                <h1 className="text-5xl font-bold">
+
+                    Privacy Audit Logs
+
+                </h1>
+
+                <p className="mt-3 text-lg">
+
+                    View all important privacy-related activities
+                    performed in your account.
+
+                </p>
+
             </div>
 
-            <div className="border-b pb-3">
-              <p className="font-semibold">
-                Consent Preferences Updated
-              </p>
-              <p className="text-gray-500 text-sm">
-                23 June 2026 - 04:20 PM
-              </p>
+            <div className="max-w-5xl mx-auto py-10">
+
+                {
+
+                    logs.length === 0 ?
+
+                    (
+
+                        <div className="bg-white p-8 rounded-xl shadow text-center">
+
+                            <h2 className="text-2xl">
+
+                                No Activity Found
+
+                            </h2>
+
+                        </div>
+
+                    )
+
+                    :
+
+                    (
+
+                        logs.map((log) => (
+
+                            <div
+                                key={log.id}
+                                className="bg-white shadow rounded-xl p-6 mb-5"
+                            >
+
+                                <div className="flex justify-between">
+
+                                    <div>
+
+                                        <h2 className="text-xl font-bold text-green-600">
+
+                                            ✔ {log.activity}
+
+                                        </h2>
+
+                                    </div>
+
+                                    <div className="text-gray-500">
+
+                                        {
+
+                                            new Date(
+                                                log.created_at
+                                            ).toLocaleString()
+
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                    )
+
+                }
+
+                <button
+
+                    onClick={() => navigate("/privacy")}
+
+                    className="mt-5 bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700"
+
+                >
+
+                    Back
+
+                </button>
+
             </div>
-
-            <div className="border-b pb-3">
-              <p className="font-semibold">
-                Personal Data Downloaded
-              </p>
-              <p className="text-gray-500 text-sm">
-                22 June 2026 - 09:45 AM
-              </p>
-            </div>
-
-          </div>
-
-          <div className="mt-8">
-
-            <button
-              onClick={() => navigate("/privacy")}
-              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
-            >
-              Back
-            </button>
-
-          </div>
 
         </div>
 
-      </div>
+    );
 
-    </div>
-  );
 }
 
 export default AuditLogs;

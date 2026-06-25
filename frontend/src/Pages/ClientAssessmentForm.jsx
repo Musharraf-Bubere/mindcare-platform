@@ -45,6 +45,11 @@ const handleSubmit = async () => {
 
     alert(response.message);
 
+    localStorage.setItem(
+      "assessment",
+      JSON.stringify(formData)
+    );
+
     if (formData.risk === "Severe") {
 
       navigate("/emergency-support");
