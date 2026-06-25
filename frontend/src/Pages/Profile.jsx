@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getProfile } from "../Services/profileService";
+import {
+  getProfile,
+  updateProfile
+} from "../Services/profileService";
 
 function Profile() {
+
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -20,7 +24,9 @@ function Profile() {
   }, []);
 
   const loadProfile = async () => {
+
     try {
+
       const response = await getProfile();
 
       const user = response.user;
@@ -32,21 +38,51 @@ function Profile() {
       setRole(user.role);
 
     } catch (error) {
+
       console.error(error);
       alert("Unable to load profile");
+
     }
+
   };
 
   const handleImageChange = (e) => {
+
     const file = e.target.files[0];
 
     if (file) {
       setProfilePic(URL.createObjectURL(file));
     }
+
   };
 
-  const handleUpdate = () => {
-    alert("Profile Update feature will be implemented next.");
+  const handleUpdate = async () => {
+
+    try {
+
+      const response = await updateProfile({
+        full_name: name,
+        email,
+        phone,
+        age
+      });
+
+      alert(response.message);
+
+      loadProfile();
+
+    } catch (error) {
+
+      console.error(error);
+
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Unable to update profile");
+      }
+
+    }
+
   };
 
   return (
@@ -107,6 +143,7 @@ function Profile() {
           />
 
           <input
+            type="number"
             value={age}
             onChange={(e) => setAge(e.target.value)}
             className="border p-3 rounded"
