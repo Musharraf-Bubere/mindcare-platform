@@ -21,3 +21,29 @@ class LoginModel:
         conn.close()
 
         return user
+    
+    @staticmethod
+    def get_user_by_id(user_id):
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+        SELECT id,
+               full_name,
+               email,
+               role,
+               phone,
+               gender,
+               age
+        FROM users
+        WHERE id = %s
+        """
+
+        cursor.execute(query, (user_id,))
+        user = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return user
