@@ -1,17 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getProfile } from "../Services/profileService";
 
 function Profile() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("Karan Shaw");
-  const [email, setEmail] = useState("karan@gmail.com");
-  const [phone, setPhone] = useState("9876543210");
-  const [age, setAge] = useState("22");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [age, setAge] = useState("");
+  const [role, setRole] = useState("");
 
   const [profilePic, setProfilePic] = useState(
     "https://i.pravatar.cc/200"
   );
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const response = await getProfile();
+
+      const user = response.user;
+
+      setName(user.full_name);
+      setEmail(user.email);
+      setPhone(user.phone);
+      setAge(user.age);
+      setRole(user.role);
+
+    } catch (error) {
+      console.error(error);
+      alert("Unable to load profile");
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -22,7 +46,7 @@ function Profile() {
   };
 
   const handleUpdate = () => {
-    alert("Profile Updated Successfully");
+    alert("Profile Update feature will be implemented next.");
   };
 
   return (
@@ -34,17 +58,18 @@ function Profile() {
 
           <img
             src={profilePic}
-            alt=""
+            alt="Profile"
             className="w-32 h-32 rounded-full border-4 border-blue-500"
           />
 
           <div>
+
             <h1 className="text-3xl font-bold">
               {name}
             </h1>
 
-            <p className="text-gray-500">
-              Client Account
+            <p className="text-gray-500 capitalize">
+              {role} Account
             </p>
 
             <p className="text-blue-600 font-medium mt-2">
@@ -56,6 +81,7 @@ function Profile() {
               onChange={handleImageChange}
               className="mt-3"
             />
+
           </div>
 
         </div>
