@@ -24,3 +24,33 @@ def get_profile():
         "success": True,
         "user": user
     }), 200
+
+
+@profile_bp.route("/profile", methods=["PUT"])
+@token_required
+def update_profile():
+
+    user_id = request.user["id"]
+
+    data = request.get_json()
+
+    full_name = data.get("full_name")
+    email = data.get("email")
+    phone = data.get("phone")
+    age = data.get("age")
+
+    LoginModel.update_user(
+        user_id,
+        full_name,
+        email,
+        phone,
+        age
+    )
+
+    user = LoginModel.get_user_by_id(user_id)
+
+    return jsonify({
+        "success": True,
+        "message": "Profile updated successfully",
+        "user": user
+    }), 200
