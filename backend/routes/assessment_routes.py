@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 
 from utils.auth_middleware import token_required
 from models.assessment_model import AssessmentModel
+from models.audit_model import AuditModel
 
 assessment_bp = Blueprint("assessment", __name__)
 
@@ -70,7 +71,14 @@ def submit_assessment():
             "selected_option": answer
         })
 
+    # Save Assessment
     AssessmentModel.save_assessment(user_id, responses)
+
+    # Audit Log
+    AuditModel.add_log(
+        user_id,
+        "Submitted mental health assessment"
+    )
 
     return jsonify({
         "success": True,

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 
 from utils.auth_middleware import token_required
 from models.login_model import LoginModel
+from models.audit_model import AuditModel
 
 profile_bp = Blueprint("profile", __name__)
 
@@ -39,6 +40,7 @@ def update_profile():
     phone = data.get("phone")
     age = data.get("age")
 
+    # Update User
     LoginModel.update_user(
         user_id,
         full_name,
@@ -47,6 +49,13 @@ def update_profile():
         age
     )
 
+    # Audit Log
+    AuditModel.add_log(
+        user_id,
+        "Updated profile information"
+    )
+
+    # Get Updated User
     user = LoginModel.get_user_by_id(user_id)
 
     return jsonify({
