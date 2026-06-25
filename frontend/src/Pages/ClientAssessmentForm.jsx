@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function ClientAssessmentForm() {
+const navigate = useNavigate();
 
 const [formData, setFormData] = useState({
   ageGroup: "",
@@ -18,15 +21,34 @@ const [formData, setFormData] = useState({
 });
 
 const handleChange = (e) => {
+
+  const { name, value } = e.target;
+
   setFormData({
     ...formData,
-    [e.target.name]: e.target.value
+    [name]: value
   });
+
+  if (name === "risk" && value === "Severe") {
+    alert(
+      "⚠️ High Risk Detected!\n\nYou may require immediate professional support."
+    );
+  }
 };
 
 const handleSubmit = () => {
+
   console.log(formData);
-  alert("Assessment Submitted");
+
+  if (formData.risk === "Severe") {
+
+    navigate("/emergency-support");
+
+  } else {
+
+    navigate("/recommendation");
+
+  }
 };
 
 
@@ -147,6 +169,36 @@ className="w-full border p-3 rounded mb-4"
 <option>Occasional</option>
 <option>Frequent</option>
 <option>Severe</option>
+
+{
+  formData.risk === "Severe" && (
+    <div className="bg-red-100 border border-red-500 p-4 rounded-lg mb-4">
+      <h3 className="text-red-700 font-bold text-lg">
+        🚨 Immediate Attention Recommended
+      </h3>
+
+      <p className="text-red-600 mt-2">
+        Based on your response, we strongly recommend
+        contacting a mental health professional immediately.
+      </p>
+
+      <div className="mt-3">
+        <p>
+          📞 Emergency: 112
+        </p>
+
+        <p>
+          ☎ Tele-MANAS Helpline: 14416
+        </p>
+
+        <p>
+          🏥 Seek nearby professional support.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 </select>
 
 {/* Therapy Start */}

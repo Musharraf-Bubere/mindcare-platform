@@ -107,6 +107,114 @@ function TherapistDashboard() {
             Today's Appointments
           </h2>
 
+<div className="bg-red-100 border-l-4 border-red-600 p-5 rounded-lg mt-8">
+
+<h3 className="text-red-700 text-xl font-bold">
+⚠ High Risk Client Alert
+</h3>
+
+<p className="mt-2">
+1 client requires immediate attention.
+Risk Level: Severe
+</p>
+
+<button className="mt-3 bg-red-600 text-white px-4 py-2 rounded">
+View Client
+</button>
+
+</div>
+
+{/* Assigned Clients */}
+
+<div className="bg-white mt-10 p-6 rounded-xl shadow">
+
+<h2 className="text-2xl font-bold mb-5">
+Assigned Clients
+</h2>
+
+<div className="overflow-x-auto">
+
+<table className="w-full border">
+
+<thead className="bg-gray-100">
+
+<tr>
+<th className="p-3 border">Name</th>
+<th className="p-3 border">Concern</th>
+<th className="p-3 border">Severity</th>
+<th className="p-3 border">Language</th>
+<th className="p-3 border">Goal</th>
+<th className="p-3 border">Match</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td className="p-3 border">
+Rahul Sharma
+</td>
+
+<td className="p-3 border">
+Anxiety
+</td>
+
+<td className="p-3 border text-red-600 font-bold">
+Severe
+</td>
+
+<td className="p-3 border">
+Hindi
+</td>
+
+<td className="p-3 border">
+Stress Reduction
+</td>
+
+<td className="p-3 border text-green-600 font-bold">
+95%
+</td>
+
+</tr>
+
+<tr>
+
+<td className="p-3 border">
+Anjali Gupta
+</td>
+
+<td className="p-3 border">
+Depression
+</td>
+
+<td className="p-3 border">
+Moderate
+</td>
+
+<td className="p-3 border">
+English
+</td>
+
+<td className="p-3 border">
+Emotional Regulation
+</td>
+
+<td className="p-3 border text-green-600 font-bold">
+89%
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
           <table className="w-full">
 
             <thead>
