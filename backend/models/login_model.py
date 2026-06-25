@@ -21,7 +21,7 @@ class LoginModel:
         conn.close()
 
         return user
-    
+
     @staticmethod
     def get_user_by_id(user_id):
 
@@ -47,3 +47,36 @@ class LoginModel:
         conn.close()
 
         return user
+
+    @staticmethod
+    def update_user(user_id, full_name, email, phone, age):
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        query = """
+        UPDATE users
+        SET full_name = %s,
+            email = %s,
+            phone = %s,
+            age = %s
+        WHERE id = %s
+        """
+
+        cursor.execute(
+            query,
+            (
+                full_name,
+                email,
+                phone,
+                age,
+                user_id
+            )
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return True
